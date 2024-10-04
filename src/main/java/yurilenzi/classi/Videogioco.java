@@ -27,6 +27,7 @@ public class Videogioco extends Gioco {
     }
 
 
+
     @Override
     public void viewGame(int index) {
         System.out.println("----------------------"+ index +"------------------------");

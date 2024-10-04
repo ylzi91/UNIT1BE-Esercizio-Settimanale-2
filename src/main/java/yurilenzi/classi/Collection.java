@@ -10,7 +10,7 @@ public class Collection {
         sceltaGame:
         while (true) {
             byte scelta = 0;
-            System.out.println("Cosa vuoi aggiungere?");
+            System.out.println("Cosa vuoi aggiungere? 0 per annullare");
             System.out.println("1) Videogioco");
             System.out.println("2) Gioco da tavolo");
             scelta = Byte.parseByte(scn.nextLine());
@@ -83,12 +83,57 @@ public class Collection {
         }
 
     }
-    public static List<Gioco> searchById(List<Gioco> giochi, int id){
 
-       return giochi.stream().filter(gioco -> gioco.getIdGioco() == id).toList();
+    public static List<Gioco> searchById(List<Gioco> giochi, int id) {
+
+        return giochi.stream().filter(gioco -> gioco.getIdGioco() == id).toList();
 
     }
-    public static List<Gioco> searchByPrice(List<Gioco> giochi , double prezzo){
+
+    public static List<Gioco> searchByPrice(List<Gioco> giochi, double prezzo) {
         return giochi.stream().filter(gioco -> gioco.getPrezzo() < prezzo).toList();
+    }
+
+    public static List<GiocoDaTavolo> searchByNG(List<GiocoDaTavolo> giochidaTavolo, int nGioc) {
+        return giochidaTavolo.stream().filter(giocoDaTavolo -> giocoDaTavolo.getNumeroGiocatori() == nGioc).toList();
+    }
+
+    public static Gioco modGioco(Gioco gioco, Scanner scanner) {
+        if (gioco instanceof GiocoDaTavolo) {
+            while (true) {
+                try {
+                    System.out.println("Modifica titolo: ");
+                    gioco.setTitolo(scanner.nextLine());
+                    System.out.println("Modifica prezzo");
+                    gioco.setPrezzo(Double.parseDouble(scanner.nextLine()));
+                    System.out.println("Modifica numero giocatori");
+                    ((GiocoDaTavolo) gioco).setNumeroGiocatori(Integer.parseInt(scanner.nextLine()));
+                    if (((GiocoDaTavolo) gioco).getNumeroGiocatori() < 2 || ((GiocoDaTavolo) gioco).getNumeroGiocatori() > 10)
+                        throw new NumeroGiocatoriException();
+                    break;
+                } catch (NumeroGiocatoriException e) {
+                    System.out.println(e.getMessage());
+                } catch (Exception e) {
+                    System.out.println("Errore nell' inserimento");
+                }
+
+            }
+        }
+        else if (gioco instanceof Videogioco){
+            while (true){
+                try {
+                    System.out.println("Modifica titolo: ");
+                    gioco.setTitolo(scanner.nextLine());
+                    System.out.println("Modifica prezzo");
+                    gioco.setPrezzo(Double.parseDouble(scanner.nextLine()));
+                    System.out.println("Modifica durata gioco");
+                    ((Videogioco) gioco).setDurataGioco(Integer.parseInt(scanner.nextLine()));
+                    break;
+                } catch (Exception e) {
+                    System.out.println("Errore nell' inserimento");
+                }
+            }
+        }
+        return gioco;
     }
 }

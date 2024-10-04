@@ -11,7 +11,9 @@ public class Application {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Hello World!");
         List<Gioco> giochi = aggiungiListaGiochi();
+        List<GiocoDaTavolo> giochidaTavolo = List.of(aggiungiGiocoDaTavolo());
         vediListaGiochi(giochi);
+
 
 
         sceltamult:
@@ -21,6 +23,7 @@ public class Application {
             System.out.println("1) Aggiungi Gioco");
             System.out.println("2) Cerca per id");
             System.out.println("3) Filtra per prezzo");
+            System.out.println("4) Filtra per numero giocatori");
             System.out.println("0) Esci");
             scelta = Integer.parseInt(scanner.nextLine());
 
@@ -30,9 +33,13 @@ public class Application {
                     break sceltamult;
                 }
                 case 1:{
-                    try {
-                        giochi.add(Collection.addGame(scanner));
-                        vediListaGiochi(giochi);
+                    try { //Qui Riccardo ho fatto una bischerata, non volevo cambiare tutto quello che avevo scritto XD
+                        Gioco giocoAggiunto = Collection.addGame(scanner);
+                        if(giocoAggiunto == null) System.out.println("Nessun gioco aggiunto");
+                        else {
+                            giochi.add(giocoAggiunto);
+                            vediListaGiochi(giochi);
+                        }
                     }
                     catch (NullPointerException e){
                         System.out.println("Uscita");
@@ -52,7 +59,31 @@ public class Application {
                                     System.out.println("Nessun id trovato");
                                 }
                                 else{
-                                    vediListaGiochi(Collection.searchById(giochi, id));
+                                    List<Gioco> giocoId = Collection.searchById(giochi,id);
+                                    vediListaGiochi(giocoId);
+                                    sceltaModRim:
+                                    while (true){
+                                        int sceltaModRim = 0;
+                                        System.out.println("Vuoi 1) Modificare? 2) Rimuovere? -- 0 per tornare alla ricerca");
+                                        sceltaModRim = Integer.parseInt(scanner.nextLine());
+                                        switch (sceltaModRim){
+                                            case 0: break sceltaModRim;
+                                            default:
+                                                System.out.println("Scelta non valida");
+                                                break;
+                                            case 2: {
+                                                giochi.remove(giocoId.get(0));
+                                                System.out.println("Elemento Rimosso");
+                                                vediListaGiochi(giochi);
+                                                break;
+                                            }
+                                            case 1: {
+                                                Collection.modGioco(giocoId.get(0), scanner);
+                                                vediListaGiochi(giochi);
+                                            }
+
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -84,7 +115,28 @@ public class Application {
                         }
 
                     }
+
                 }
+                case 4:
+                    while (true){
+                        try{
+                            int nGioc;
+                            System.out.println("Per quale numero di giocatori vuoi filtrare");
+                            nGioc = Integer.parseInt(scanner.nextLine());
+                            List<GiocoDaTavolo> filterNG = Collection.searchByNG(giochidaTavolo, nGioc);
+                            if(filterNG.isEmpty()) System.out.println("Non ci sono giochi con " + nGioc + " giocatori" );
+                            else {
+                                System.out.println("----------------- Lista giochi con " + nGioc + " giocatori-----------------------------");
+                                vediListaGiochiTavolo(filterNG);
+
+                            }
+                            break;
+                        }
+                        catch (Exception e){
+                            System.out.println("Errore generico");
+                        }
+                    }
+
             }
         }
 
@@ -107,8 +159,8 @@ public class Application {
         return games;
     }
 
-    public static Gioco[] aggiungiGiocoDaTavolo(){
-        Gioco[] tableGames = new GiocoDaTavolo[]{
+    public static GiocoDaTavolo[] aggiungiGiocoDaTavolo(){
+        GiocoDaTavolo[] tableGames = new GiocoDaTavolo[]{
                 new GiocoDaTavolo("Catan", 1995, 35.99, 3, 75),
                 new GiocoDaTavolo("Pandemic", 2008, 39.99, 4, 45),
                 new GiocoDaTavolo("Ticket to Ride", 2004, 49.99, 5, 60),
@@ -129,6 +181,10 @@ public class Application {
         return giochi;
     }
     public static void vediListaGiochi(List<Gioco> giochi){
+        for (int i = 0; i < giochi.size(); i++) {
+            giochi.get(i).viewGame(i +1);
+        }
+    }public static void vediListaGiochiTavolo(List<GiocoDaTavolo> giochi){
         for (int i = 0; i < giochi.size(); i++) {
             giochi.get(i).viewGame(i +1);
         }

@@ -12,6 +12,22 @@ public class GiocoDaTavolo extends Gioco {
         this.mediaMinuti = mediaMinuti;
     }
 
+    public int getNumeroGiocatori() {
+        return numeroGiocatori;
+    }
+
+    public int getMediaMinuti() {
+        return mediaMinuti;
+    }
+
+    public void setNumeroGiocatori(int numeroGiocatori) {
+        this.numeroGiocatori = numeroGiocatori;
+    }
+
+    public void setMediaMinuti(int mediaMinuti) {
+        this.mediaMinuti = mediaMinuti;
+    }
+
     @Override
     public void viewGame(int index) {
         System.out.println("----------------------"+ index+"---------------------------");
