@@ -12,6 +12,12 @@ public class Application {
         System.out.println("Hello World!");
         List<Gioco> giochi = aggiungiListaGiochi();
         List<GiocoDaTavolo> giochidaTavolo = List.of(aggiungiGiocoDaTavolo());
+        OptionalDouble max = giochi.stream().mapToDouble(gioco -> gioco.getPrezzo()).max();
+        List<Gioco> giocoAlto = giochi.stream().sorted(Comparator.comparingDouble(Gioco::getPrezzo).reversed()).limit(1).toList();
+        System.out.println(giocoAlto.get(0).getTitolo() + " " + giocoAlto.get(0).getPrezzo());
+        OptionalDouble media = giochi.stream().mapToDouble(Gioco::getPrezzo).average();
+        System.out.println(media.getAsDouble());
+        System.out.println(max.getAsDouble());
         vediListaGiochi(giochi);
 
 
@@ -75,7 +81,7 @@ public class Application {
                                                 giochi.remove(giocoId.get(0));
                                                 System.out.println("Elemento Rimosso");
                                                 vediListaGiochi(giochi);
-                                                break;
+                                                break sceltaModRim;
                                             }
                                             case 1: {
                                                 Collection.modGioco(giocoId.get(0), scanner);
