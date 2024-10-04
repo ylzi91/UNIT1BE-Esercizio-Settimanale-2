@@ -1,5 +1,6 @@
 package yurilenzi.classi;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -30,16 +31,13 @@ public class Collection {
                         String piattaforoma = scn.nextLine();
                         System.out.println("Generi");
                         System.out.println(Arrays.stream(Generi.values()).toList());
-                        Generi genere = Generi.valueOf(scn.nextLine());
-                        if (
-                                genere != Generi.AZIONE &&
-                                        genere != Generi.BUILDER &&
-                                        genere != Generi.HORROR &&
-                                        genere != Generi.COMBATTIMENTO &&
-                                        genere != Generi.SPARATUTTO) {
+                        String genere = scn.nextLine();
+                        List<String> str = new ArrayList<>(Arrays.asList("AZIONE","HORROR", "COMBATTIMENTO", "SPARATUTTO", "BUILDER"));
+                        if (!str.contains(genere)) {
                             throw new GenreException();
                         }
-                        Gioco newGioco = new Videogioco(titolo, annoPubblicazione, prezzo, piattaforoma, durata, genere);
+
+                        Gioco newGioco = new Videogioco(titolo, annoPubblicazione, prezzo, piattaforoma, durata, Generi.valueOf(genere.toUpperCase()));
                         return newGioco;
                     } catch (PrezzoException e) {
                         System.out.println(e.getMessage());
